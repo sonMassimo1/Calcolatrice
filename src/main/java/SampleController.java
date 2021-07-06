@@ -1,18 +1,16 @@
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class SampleController implements Initializable {
 
     double operand1, operand2, result;
-    String op;
+    String op, den, num;
 
     @FXML
     private Label lbResult;
@@ -57,13 +55,14 @@ public class SampleController implements Initializable {
          * CONTROLLI
          */
 
+
         //controllo se è stata scelta l'operazione
-        if(op.compareTo("") == 0) {
+        if (op.compareTo("") == 0) {
             lbResult.setText("ERROR: select an operation!");
         } else {
 
             //controllo divisione per 0
-            if ((op.compareTo("divisione") == 0) && ((tfOperand2.getText().compareTo("0") == 0) | (tfOperand2.getText().compareTo("") == 0)) ) {
+            if ((op.compareTo("divisione") == 0) && ((tfOperand2.getText().compareTo("0") == 0) || (tfOperand2.getText().compareTo("") == 0))) {
                 lbResult.setText("Infinite");
                 tfOperand1.setText("");
                 tfOperand2.setText("");
@@ -71,10 +70,17 @@ public class SampleController implements Initializable {
             } else {
 
                 //setto operand1
-                if(tfOperand1.getText().compareTo("") == 0) {
+                if (tfOperand1.getText().compareTo("") == 0) {
                     operand1 = 0;
                 } else {
-                    operand1 = Double.parseDouble(tfOperand1.getText());
+                    den = tfOperand1.getText();
+                    if (den.matches("[0-9]*")) {
+                        operand1 = Double.parseDouble(den);
+
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING, "It Can not contain letters", ButtonType.OK);
+                        alert.showAndWait();
+                    }
                 }
 
 
@@ -83,24 +89,36 @@ public class SampleController implements Initializable {
                  */
 
                 //addizione
-                if(op.compareTo("add") == 0) {
-                    if(tfOperand2.getText().compareTo("") == 0) {
+                if (op.compareTo("add") == 0) {
+                    if (tfOperand2.getText().compareTo("") == 0) {
                         operand2 = 0;
                     } else {
-                        operand2 = Double.parseDouble(tfOperand2.getText());
+                        num = tfOperand2.getText();
+                        if (num.matches("[0-9]*")) {
+                            operand2 = Double.parseDouble(num);
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.WARNING, "It Can not contain letters", ButtonType.OK);
+                            alert.showAndWait();
+                        }
                     }
                     result = operand1 + operand2;
                 }
 
                 //log10
-                if(op.compareTo("log10") == 0) {
+                if (op.compareTo("log10") == 0) {
                     result = Math.log10(operand1);
                 }
 
                 //divisione
-                if(op.compareTo("divisione") == 0) {
-                    operand2 = Double.parseDouble(tfOperand2.getText());
-                    result = (operand1)/(operand2);
+                if (op.compareTo("divisione") == 0) {
+                    num = tfOperand2.getText();
+                    if (num.matches("[0-9]*")) {
+                        operand2 = Double.parseDouble(num);
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING, "It Can not contain letters", ButtonType.OK);
+                        alert.showAndWait();
+                    }
+                    result = (operand1) / (operand2);
                 }
 
                 //visualizza risultato operazioni
