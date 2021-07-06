@@ -54,8 +54,7 @@ public class SampleController implements Initializable {
         /*
          * CONTROLLI
          */
-
-
+        
         //controllo se è stata scelta l'operazione
         if (op.compareTo("") == 0) {
             lbResult.setText("ERROR: select an operation!");
